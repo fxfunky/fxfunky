@@ -1,4 +1,4 @@
-I'm fxfunky from fxlab project - DIY electrotechnical workshop, Czech republic
+I'm fxfunky from fxlab project - DIY electrotechnical workshop,
 doing IoT :-)
 
 <!---
