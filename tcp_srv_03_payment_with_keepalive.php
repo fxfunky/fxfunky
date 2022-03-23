@@ -121,7 +121,8 @@ do {
                 echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
                 break 2;
                 }  
-                if (strpos($buf, 'B201') && (strpos($buf, 'T00') !== false)) {
+                if (strpos($buf, 'B201') && (st
+                rpos($buf, 'T00') !== false)) {
                     echo "[SUCCESS] Test $incr_test_number T00 Payment PASSED :-)\n";
                 }
 
