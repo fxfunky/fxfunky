@@ -55,7 +55,7 @@ function cancel_payment($socketName) {
     $request = chr(0x02) . "B101" . $GLOBALS['emptyTid'] . $GLOBALS['timestamp'] . $GLOBALS['optsMask'] . $dataLen . $GLOBALS['crcCode'] . chr(0x1c) . $operCmd . chr(0x03);
     //error_log("[DEBUG] Generated B1 request  is: " . $request);
     socket_write($socketName, $request, strlen($request));
-    sleep(5);
+    sleep(1);
 }
 
 function init_handshake($socketName) {
@@ -81,6 +81,16 @@ function call_to_tms($socketName) {
 
 function terminal_appinfo($socketName) {
     $operCmd = "T80";
+    $dataLen = str_pad(dechex(strlen(chr(0x1c) . $operCmd)), 4, "0", STR_PAD_LEFT);
+    //error_log("[DEBUG] Calculated data lengh is: " . $dataLen);
+    $request = chr(0x02) . "B101" . $GLOBALS['emptyTid'] . $GLOBALS['timestamp'] . $GLOBALS['optsMask'] . $dataLen . $GLOBALS['crcCode'] . chr(0x1c) . $operCmd . chr(0x03);
+    //error_log("[DEBUG] Generated B1 request  is: " . $request);
+    socket_write($socketName, $request, strlen($request));
+    sleep(1);
+}
+
+function get_last_transaction($socketName) {
+    $operCmd = "T82";
     $dataLen = str_pad(dechex(strlen(chr(0x1c) . $operCmd)), 4, "0", STR_PAD_LEFT);
     //error_log("[DEBUG] Calculated data lengh is: " . $dataLen);
     $request = chr(0x02) . "B101" . $GLOBALS['emptyTid'] . $GLOBALS['timestamp'] . $GLOBALS['optsMask'] . $dataLen . $GLOBALS['crcCode'] . chr(0x1c) . $operCmd . chr(0x03);

@@ -9,8 +9,8 @@
 include 'functions.php';
 include 'config.php';
 
-$testId             = '001';
-$testName           = 'basic terminal test';
+$testId             = '000';
+$testName           = 'application keep-alive test';
 $incr_test_number   = 0;
 get_banner();
 
@@ -114,114 +114,25 @@ do {
 
         }
 
-    //
-    // handshake test
-    //
-    for ($i=1; $i <= 1; $i++) {
-        $incr_test_number++;
-        echo "[INFO] T95 Handshake test begin\n";
-        init_handshake($msgsock);
+        init_payment(12500,$msgsock);
 
-        if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
-            echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-            break 2;
-        }
-
-        $progress_count = 1;
-        
-        while(strpos($buf, 'B001') !== false) {
-            echo "[INFO] Progress count is: $progress_count\n";
+        do {
             if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
                 echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-                break 1;
-            }
-            $progress_count++;
+                break 2;
+                }  
+                if (strpos($buf, 'B201') && (strpos($buf, 'T00') !== false)) {
+                    echo "[SUCCESS] Test $incr_test_number T00 Payment PASSED :-)\n";
+                }
+
+                handle_keepalive($buf,$msgsock);
+            
         }
-
-        if (strpos($buf, 'B201') && (strpos($buf, 'R000') !== false)) {
-            echo "[SUCCESS] Test $incr_test_number PASSED :-)\n";
-        } else {
-            echo "[ERROR] Test $incr_test_number FAILED... \n"; 
-            // report and do next test
-            }
-        }
-        
-    //
-    // tms call
-    //
-    for ($i=1; $i <= 1; $i++) {
-        $incr_test_number++;
-        echo "[INFO] TMS Call test begin\n";
-        call_to_tms($msgsock);
-
-        if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
-            echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-            break 2;
-        }
-
-        $progress_count = 1;
-        
-        while(strpos($buf, 'B001') !== false) {
-            echo "[INFO] Progress count is: $progress_count\n";
-            if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
-                echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-                break 1;
-            }
-            $progress_count++;
-        }
-
-        if (strpos($buf, 'B201') && (strpos($buf, 'R000') !== false)) {
-            echo "[SUCCESS] Test $incr_test_number PASSED :-)\n";
-
-            // podminka pro jine vysledky tms callu
-
-        } else {
-            echo "[ERROR] Test $incr_test_number FAILED... \n"; 
-            // report and do next test
-            }
-        }
-
-    //
-    // payment
-    //
-    for ($i=1; $i <= 1; $i++) {
-        handle_keepalive($buf,$msgsock);
-        $incr_test_number++;
-        echo "[INFO] Payment test begin\n";
-        init_payment(15000,$msgsock);
-
-        if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
-            echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-            break 2;
-        }
-
-        $progress_count = 1;
-        
-        while(strpos($buf, 'B001') !== false) {
-            echo "[INFO] Progress count is: $progress_count\n";
-            if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
-                echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-                break 1;
-            }
-            $progress_count++;
-        }
-
-        if (strpos($buf, 'B201') && (strpos($buf, 'R000') !== false)) {
-            echo "[SUCCESS] Test $incr_test_number PASSED :-)\n";
-
-            // podminka pro jine vysledky tms callu
-
-        } else {
-            echo "[ERROR] Test $incr_test_number FAILED... \n"; 
-            // report and do next test
-            }
-        }
+        while(true);
+        socket_close($msgsock);
+ 
 
 
-
-
-
-        continue;
     }
     echo "[INFO] ALL TESTS DONE\n";
     continue;
