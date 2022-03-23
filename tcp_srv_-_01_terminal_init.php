@@ -59,7 +59,7 @@ do {
     // PAYMENT TERMINAL INITIALIZATION
     //
 
-    // initialize terminal by appinfo command and enable keep-alive
+    
 
     //
     // send passivate to set up terminal into known state 
@@ -94,7 +94,7 @@ do {
 
 
     //
-    // appinfo
+    // initialize terminal by appinfo command and enable keep-alive
     //
     for ($i=1; $i <= 1; $i++) {
         $incr_test_number++;
@@ -223,46 +223,8 @@ do {
         continue;
     }
     echo "[INFO] ALL TESTS DONE\n";
-    
-    /*
-    do {
-        if (false === ($buf = socket_read($msgsock, 2048, PHP_BINARY_READ))) {
-            echo "[ERROR] socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)) . "\n";
-            break 2;
-        }
-        if ($x == 3) {
-                $bprotcmd = hex2bin('024231303120202020202020203232303331313232313934323230303030303034413541351c54383003');
-                socket_write($msgsock, $bprotcmd, strlen($bprotcmd));
-                sleep(3);
-                //echo("l1 " . ($buf) . "\n");
-                $x--;
-            }
-        if ($x == 2) {
-                init_payment(12300,$msgsock);
-                sleep(8);
-                //echo("l2 " . ($buf) . "\n");
-                $x--;
-                }
-        if ($x == 1) {
-                cancel_payment($msgsock);
-                sleep(3);
-                //echo("l3 " . ($buf) . "\n");
-                $x--;
-                } else {
-                    // test result
-                    echo("end " . ($buf) . "\n");
-                    echo "[INFO] Test finished ;-)\n";
-
-                    sleep(1);
-                    exit;
-                }
-        
-        }
-        while(true);
-        echo "while 1";
-        socket_close($msgsock);        
-    */
     continue;
+
     }
     while(true);
     echo "program end";
